@@ -1,0 +1,52 @@
+const EventEmitter = require('events');
+const eventEmitter = new EventEmitter();
+
+eventEmitter.on('greet', (name) => {
+  console.log(`Hello, ${name}!`);
+});
+eventEmitter.emit('greet', 'John');
+
+---------------------------------------------------------------
+const fs = require('fs');
+const readStream = fs.createReadStream('test.txt', 'utf-8');
+
+readStream.on('data', (chunk) => {
+  console.log(chunk);
+});
+readStream.on('end',()=>
+{
+  console.log('File reading completed');
+});
+readStream.on('error',(err)=>
+{
+  console.log(err);
+});
+
+
+
+
+const fs = require("fs");
+
+const writeStream = fs.createWriteStream("output.txt");
+
+writeStream.write("Hello ");
+writeStream.write("Node.js ");
+writeStream.write("Streams");
+
+writeStream.end();
+
+writeStream.on("finish", () => {
+  console.log("Writing completed");
+});
+
+
+readStream.pipe(writeStream);
+-----------------------------------------------------
+const buffer=Buffer.alloc(19); or Buffer.from("Hello");
+buffer.write('Hello this is node js');
+
+console.log(buffer.toString());
+
+
+
+npm install chalk@4
