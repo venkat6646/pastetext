@@ -1,0 +1,127 @@
+
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+-------------------------------------------------------------------------------
+
+const express = require('express')
+const mongoose = require('mongoose')
+const app = express()
+app.use(express.json())
+app.set('view engine','pug')
+
+  mongoose.connect('mongodb://localhost:27017/practiceDB')
+  .then(()=>console.log("MongoDB connected"))
+  .catch((err)=>console.log(err));
+
+  const EventSchema = new mongoose.Schema({
+    eventId:Number,
+    eventName:String
+  })
+  const Event= mongoose.model("event",EventSchema);
+
+
+app.get('/events/:eventName',async (req,res)=>
+{
+const events = await Event.find({eventName:req.params.eventName});
+res.render('events',{events:events});
+});
+
+app.post("/event",async (req,res)=>
+{
+const event = new Event(req.body);
+await event.save();
+res.json("Data inserted");
+});
+
+app.put('/event/:id',async(req,res)=>
+{
+  await Event.updateOne({eventId: req.params.id},req.body);
+  res.json("Data updated");
+})
+
+app.delete('/event/:id',async(req,res)=>
+{
+  await Event.deleteOne({eventId: req.params.id});
+  res.json("Data deleted");
+});
+
+
+
+app.listen(3000,()=>
+{
+  console.log("http://localhost:3000");
+})
+
+-----------------------------------------------------------------------------------------------------------------------
+npm install cookie-parser
+
+const express = require("express");
+const cookieParser = require("cookie-parser");
+
+const app = express();
+
+app.use(cookieParser());
+
+app.get("/login", (req, res) => {
+
+    res.cookie("username", "Aarya");
+
+    res.send("Login Successful");
+
+});
+
+app.get("/profile", (req, res) => {
+
+    res.send(req.cookies.username);
+
+});
+
+app.get("/logout", (req, res) => {
+
+    res.clearCookie("username");
+
+    res.send("Logged Out");
+
+});
+
+app.listen(3000);
+
+-------------------------------
+const express = require("express");
+const session = require("express-session");
+
+const app = express();
+
+app.use(session({
+
+    secret: "mysecret",
+
+    resave: false,
+
+    saveUninitialized: true
+
+}));
+
+app.get("/login", (req, res) => {
+
+    req.session.username = "Aarya";
+
+    res.send("Session Created");
+
+});
+
+app.get("/profile", (req, res) => {
+
+    res.send(req.session.username);
+
+});
+
+app.get("/logout", (req, res) => {
+
+    req.session.destroy();
+
+    res.send("Session Destroyed");
+
+});
+
+app.listen(3000);	
