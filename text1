@@ -1,52 +1,22 @@
-const EventEmitter = require('events');
-const eventEmitter = new EventEmitter();
+sudo apt update
+sudo apt install -y virtualbox
 
-eventEmitter.on('greet', (name) => {
-  console.log(`Hello, ${name}!`);
-});
-eventEmitter.emit('greet', 'John');
+a. Add HashiCorp GPG key
+curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 
----------------------------------------------------------------
-const fs = require('fs');
-const readStream = fs.createReadStream('test.txt', 'utf-8');
+b. Add HashiCorp repository
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
 
-readStream.on('data', (chunk) => {
-  console.log(chunk);
-});
-readStream.on('end',()=>
-{
-  console.log('File reading completed');
-});
-readStream.on('error',(err)=>
-{
-  console.log(err);
-});
+c. Update & install Vagrant
+sudo apt update
+sudo apt install -y vagrant
 
+-------------------------------------------------------------------------------------
 
+sudo snap install kubectl --classic
 
-
-const fs = require("fs");
-
-const writeStream = fs.createWriteStream("output.txt");
-
-writeStream.write("Hello ");
-writeStream.write("Node.js ");
-writeStream.write("Streams");
-
-writeStream.end();
-
-writeStream.on("finish", () => {
-  console.log("Writing completed");
-});
-
-
-readStream.pipe(writeStream);
------------------------------------------------------
-const buffer=Buffer.alloc(19); or Buffer.from("Hello");
-buffer.write('Hello this is node js');
-
-console.log(buffer.toString());
-
-
-
-npm install chalk@4
+curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64  
